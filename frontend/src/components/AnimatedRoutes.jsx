@@ -4,7 +4,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import ImageUploadPage from "./admin/admin";
 import AdmissionForm from "./admissionform";
 import LoginPage from "./admin/admin";
-import Dashboard from "./dashboard/dashboard";
+// import Dashboard from "./dashboard/dashboard";
+import Dashboard from "./dashboard";
 
 // Lazy load components
 const Coursoul = lazy(() => import('./home/Coursoul'));
@@ -166,8 +167,7 @@ function AnimatedRoutes() {
           <Route
             path="/dashboard"
             element={
-              <motion.div
-                initial={{ x: 100, opacity: 0 }}
+              <motion.div initial={{ x: 100, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: -100, opacity: 0 }}
                 transition={{ duration: 0.5 }}
@@ -176,6 +176,7 @@ function AnimatedRoutes() {
               </motion.div>
             }
           />
+          
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </AnimatePresence>
