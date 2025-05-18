@@ -1,91 +1,104 @@
-import React, { useState } from "react";
+import { useState, useRef, useEffect } from 'react';
+import { Menu, X } from 'lucide-react';
+import Sidebar from '../sidebar.jsx';
 
-const Dashboard = () => {
-  const [note, setNote] = useState("");
-  const [totalStudents, setTotalStudents] = useState(120); // Dummy data
-  const [totalVisitors, setTotalVisitors] = useState(350); // Dummy data
-  const [adminImage, setAdminImage] = useState(null);
+export default function Dashboard() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [popupOpen, setPopupOpen] = useState(false);
+  const popupRef = useRef();
 
-  // Handle Admin Image Upload
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setAdminImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  // Handle Save Note
-  const handleSaveNote = () => {
-    alert("Note saved!");
-  };
+  // Close popup on outside click
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (popupRef.current && !popupRef.current.contains(event.target)) {
+        setPopupOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center py-10">
-      <div className="w-full max-w-4xl bg-white rounded-3xl shadow-xl p-10 space-y-8">
-        {/* Header */}
-        <div className="text-center">
-          <h1 className="text-4xl font-semibold text-indigo-700 mb-4">Admin Dashboard</h1>
-          <p className="text-gray-500 text-lg">Manage your content here</p>
-        </div>
-
-        {/* Admin Image Upload Section */}
-        <div className="space-y-6">
-          <h2 className="text-2xl font-semibold text-gray-700">Upload Admin Image</h2>
-          <div className="flex justify-center items-center border-2 border-dashed p-6 rounded-3xl bg-gray-100 hover:bg-gray-200 transition duration-300">
-            {adminImage ? (
-              <img
-                src={adminImage}
-                alt="Admin"
-                className="w-40 h-40 rounded-full object-cover shadow-lg"
-              />
-            ) : (
-              <p className="text-gray-500 text-lg">No image uploaded</p>
-            )}
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="ml-6 text-sm text-gray-600"
-            />
-          </div>
-        </div>
-
-        {/* Notes Section */}
-        <div className="space-y-6">
-          <h2 className="text-2xl font-semibold text-gray-700">Add Note</h2>
-          <textarea
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-            className="w-full p-4 border border-gray-300 rounded-3xl shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            rows="4"
-            placeholder="Write your note here..."
-          ></textarea>
-          <button
-            onClick={handleSaveNote}
-            className="w-full py-3 bg-indigo-600 text-white rounded-3xl shadow-md hover:bg-indigo-700 transition duration-300"
-          >
-            Save Note
+    <div className="min-h-screen bg-gray-100 flex-col mt-28">
+      {/* Top Navbar */}
+      <div className="bg-blue-500 shadow-md px-4 py-3 flex justify-between items-center md:ml-64">
+        <div className="flex items-center gap-2">
+          <button className="md:hidden" onClick={() => setSidebarOpen(!sidebarOpen)}>
+            {sidebarOpen ? <X /> : <Menu />}
           </button>
+          <h1 className="text-xl font-bold text-white">Company Dashboard</h1>
         </div>
 
-        {/* Stats Section */}
-        <div className="grid grid-cols-2 gap-8">
-          <div className="bg-indigo-100 p-8 rounded-3xl shadow-xl text-center hover:shadow-2xl transition duration-300">
-            <h3 className="text-xl font-semibold text-indigo-700">Total Students</h3>
-            <p className="text-4xl font-bold text-indigo-600">{totalStudents}</p>
-          </div>
-          <div className="bg-indigo-100 p-8 rounded-3xl shadow-xl text-center hover:shadow-2xl transition duration-300">
-            <h3 className="text-xl font-semibold text-indigo-700">Total Visitors</h3>
-            <p className="text-4xl font-bold text-indigo-600">{totalVisitors}</p>
-          </div>
+        {/* User Avatar with Popup */}
+        <div className="relative flex items-center space-x-4" ref={popupRef}>
+          <img
+            src="https://via.placeholder.com/150"
+            alt="User"
+            className="w-10 h-10 rounded-full border cursor-pointer"
+            onClick={() => setPopupOpen(!popupOpen)}
+          />
+
+          {popupOpen && (
+            <div className="absolute top-full right-0 mt-2 w-48 bg-white border rounded-xl shadow-lg p-4 z-50">
+              <div className="text-sm font-medium">ID: 123456</div>
+              <div className="text-sm font-medium">Name: Prakash</div>
+              <hr className="my-2" />
+              <button className="text-red-500 font-semibold hover:underline">Logout</button>
+            </div>
+          )}
+        </div>
+
+      </div>
+
+      {/* Sidebar */}
+      <aside>
+        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      </aside>
+
+      {/* Main Content */}
+      <div className="flex-1 p-4 md:ml-64 space-y-4">
+        {/* Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {['Revenue', 'Users', 'Sales', 'Growth'].map((label, i) => (
+            <div key={i} className="bg-white p-4 shadow-md rounded-2xl">
+              <h3 className="text-sm text-gray-500">{label}</h3>
+              <p className="text-xl font-bold text-gray-800">{(1000 * (i + 1)).toLocaleString()}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Charts Placeholder */}
+        <div className="bg-white shadow-md p-6 rounded-2xl h-64 flex items-center justify-center text-gray-400">
+          [Insert Chart Here]
+        </div>
+
+        {/* Table */}
+        <div className="bg-white shadow-md rounded-2xl overflow-auto">
+          <table className="w-full table-auto text-left text-sm">
+            <thead className="bg-gray-100 text-gray-600 font-semibold">
+              <tr>
+                <th className="px-4 py-2">Name</th>
+                <th className="px-4 py-2">Email</th>
+                <th className="px-4 py-2">Role</th>
+              </tr>
+            </thead>
+            <tbody className="text-gray-700">
+              {[
+                { name: 'Prakash Suryavanshi', email: 'prakashsurya@gmail.com', role: 'Manager' },
+                { name: 'Ashish', email: 'ashishsingh09560@gmail.com', role: 'Developer' },
+              ].map((user, idx) => (
+                <tr key={idx} className="border-t">
+                  <td className="px-4 py-2">{user.name}</td>
+                  <td className="px-4 py-2">{user.email}</td>
+                  <td className="px-4 py-2">{user.role}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   );
-};
-
-export default Dashboard;
+}
