@@ -5,27 +5,30 @@ import ImageUploadPage from "./admin/admin";
 import AdmissionForm from "./admissionform";
 import LoginPage from "./admin/admin";
 import Dashboard from "./dashboard/dashboard";
+import NoticeForm from "./NoitceForm/NoticeForm";
 
 // Lazy load components
-const Coursoul = lazy(() => import('./home/Coursoul'));
-const Main1 = lazy(() => import('./home/Main1'));
-const Main2 = lazy(() => import('./home/Main2'));
-const Marquee = lazy(() => import('./home/Marquee'));
-const Main3 = lazy(() => import('./home/Main3'));
-const Timer = lazy(() => import('./home/Timer'));
-const Faculty = lazy(() => import('./faculty/Faculty'));
-const Students = lazy(() => import('./student/Students'));
-const Events = lazy(() => import('./event/Events'));
-const Curriculum = lazy(() => import('./academic/Curriculum'));
-const Moto = lazy(() => import('./mission/Moto'));
-const College = lazy(() => import('./about/About'));
-const Contact = lazy(() => import('./Contact'));
+const Coursoul = lazy(() => import("./home/Coursoul"));
+const Main1 = lazy(() => import("./home/Main1"));
+const Main2 = lazy(() => import("./home/Main2"));
+const Marquee = lazy(() => import("./home/Marquee"));
+const Main3 = lazy(() => import("./home/Main3"));
+const Timer = lazy(() => import("./home/Timer"));
+const Faculty = lazy(() => import("./faculty/Faculty"));
+const Students = lazy(() => import("./student/Students"));
+const Events = lazy(() => import("./event/Events"));
+const Curriculum = lazy(() => import("./academic/Curriculum"));
+const Moto = lazy(() => import("./mission/Moto"));
+const College = lazy(() => import("./about/About"));
+const Contact = lazy(() => import("./Contact"));
 
 function AnimatedRoutes() {
   const location = useLocation();
 
   return (
-    <Suspense fallback={<div>Loading...</div>}> {/* Loading spinner or placeholder */}
+    <Suspense fallback={<div>Loading...</div>}>
+      {" "}
+      {/* Loading spinner or placeholder */}
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route
@@ -159,7 +162,7 @@ function AnimatedRoutes() {
                 exit={{ x: -100, opacity: 0 }}
                 transition={{ duration: 0.5 }}
               >
-              <AdmissionForm />
+                <AdmissionForm />
               </motion.div>
             }
           />
@@ -172,11 +175,25 @@ function AnimatedRoutes() {
                 exit={{ x: -100, opacity: 0 }}
                 transition={{ duration: 0.5 }}
               >
-              <Dashboard />
+                <Dashboard />
               </motion.div>
             }
           />
           <Route path="*" element={<Navigate to="/" />} />
+
+          <Route
+            path="/noticeform"
+            element={
+              <motion.div
+                initial={{ x: -100, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: 100, opacity: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <NoticeForm />
+              </motion.div>
+            }
+          />
         </Routes>
       </AnimatePresence>
     </Suspense>

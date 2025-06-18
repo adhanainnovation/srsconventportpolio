@@ -4,6 +4,12 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import { YouTube } from "@mui/icons-material";
 
 function Footer() {
+  const [count, setCount] = useState(0);
+
+  const handleVisitorClick = () => {
+    setCount((prev) => prev + 1);
+  };
+
   return (
     <footer className="text-center text-lg-start text-muted bg-gray-50">
       {/* Top Section */}
@@ -14,7 +20,9 @@ function Footer() {
           <div className="row mt-3">
             {/* Address Section */}
             <div className="col-12 col-md-4 col-lg-3 mx-auto mb-4">
-              <h6 className="text-uppercase font-bold mb-4">SRS Convent School</h6>
+              <h6 className="text-uppercase font-bold mb-4">
+                SRS Convent School
+              </h6>
               <p>
                 Address: <br />
                 Sector 62, <br />
@@ -105,6 +113,15 @@ function Footer() {
                   </a>
                 </p>
               </div>
+            </div>
+            <div className="flex justify-end gap-2 mb-4 items-center">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/10741/10741336.png"
+                alt="visitor icon"
+                className="w-20 lg:float-right"
+                onClick={handleVisitorClick}
+              />
+              <p className="text-sm text-gray-700">Visitor Count: {count}</p>
             </div>
           </div>
         </div>
