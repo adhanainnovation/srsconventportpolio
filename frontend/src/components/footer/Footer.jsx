@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import { YouTube } from "@mui/icons-material";
+import { useState } from "react";
 
 function Footer() {
   const [count, setCount] = useState(0);
